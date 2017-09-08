@@ -15,6 +15,12 @@ url = BASE_URL + ENDPOINT_URL.format(**{
     'site_number': site_number,
 })
 
+# Load existing data
+handle = open('water_data.js')
+existing_list = handle.read()
+handle.close()
+existing_list = existing_list[0:-2]
+
 res = requests.get(url)
 for line in res.iter_lines():
     if line.startswith('#'):
@@ -36,8 +42,18 @@ for line in res.iter_lines():
     timestamp = entry[2]
     timestamp = timestamp.replace(' ', 'T')
     timestamp += ':00'
-    print('["{timestamp}", {value}],'.format(**{
+    
+    output = '["{timestamp}", {value}],'.format(**{
         'timestamp': timestamp,
         'value': entry[4]
-    }))
+    })
+    
+    if timestamp not in existing_list:
+        existing_list += '\n' + output
+
+existing_list += '\n]'
+
+handle = open('water_data.js', 'w+')
+handle.write(existing_list)
+handle.close()
 
