@@ -35,6 +35,10 @@ var waterChart = new Chart(ctx, {
     data: generateChartData(31*24),
     options: {
         responsive: false,
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
         scales: {
             xAxes: [{
                 type: "time",
