@@ -32,7 +32,7 @@ var timeFormat = 'MM/DD/YYYY HH:mm';
 
 var waterChart = new Chart(ctx, {
     type: 'line',
-    data: generateChartData(21*24),
+    data: generateChartData(31*24),
     options: {
         responsive: false,
         scales: {
