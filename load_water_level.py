@@ -23,14 +23,21 @@ for line in res.iter_lines():
     if 'agency_cd' in line:
         continue
     
+    # If its column header row
     if '5s	15s	20d	6s	14n	10s' in line:
         continue
     
-    # Only top of hour
+    # Only top of hour, ignore 15min intervals
     if ':00' not in line:
         continue
     
     entry = line.split('\t')
     
-    print(entry[2] + '\t' + entry[4])
+    timestamp = entry[2]
+    timestamp = timestamp.replace(' ', 'T')
+    timestamp += ':00'
+    print('["{timestamp}", {value}],'.format(**{
+        'timestamp': timestamp,
+        'value': entry[4]
+    }))
 

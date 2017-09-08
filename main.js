@@ -32,7 +32,7 @@ var timeFormat = 'MM/DD/YYYY HH:mm';
 
 var waterChart = new Chart(ctx, {
     type: 'line',
-    data: generateChartData(800),
+    data: generateChartData(21*24),
     options: {
         responsive: false,
         scales: {
@@ -51,7 +51,7 @@ var waterChart = new Chart(ctx, {
             yAxes: [{
                 scaleLabel: {
                     display: true,
-                    labelString: 'value'
+                    labelString: 'Water Level'
                 }
             }]
         }
