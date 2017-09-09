@@ -39,6 +39,9 @@ var waterChart = new Chart(ctx, {
             mode: 'index',
             intersect: false,
         },
+        legend: {
+            display: false
+        },
         scales: {
             xAxes: [{
                 type: "time",
@@ -53,9 +56,10 @@ var waterChart = new Chart(ctx, {
                 }
             }, ],
             yAxes: [{
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Water Level'
+                ticks: {
+                    callback: function(value, index, values) {
+                        return value + ' ft';
+                    }
                 }
             }]
         }
