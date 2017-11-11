@@ -64,6 +64,7 @@ def crawl_data():
 
 def update_db(data_rows):
     """ Update the db with the given crawled rows """
+    """ format: [(timestamp, value), (timestamp, value), ...] """
     
     for entry in data_rows:
         
@@ -71,7 +72,7 @@ def update_db(data_rows):
             insert or replace into GaugeData (id, timestamp, reading) values(
                 (select id from GaugeData where timestamp = "{timestamp}"),
                 "{timestamp}",
-                "{reading}"
+                {reading}
             )
         '''.format(timestamp=entry[0], reading=entry[1])
         
