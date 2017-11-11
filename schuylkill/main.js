@@ -40,12 +40,16 @@ var generateChartData = function(){
     precipSource.forEach(function(reading){
         var timestamp = moment(reading[0]);
         
-        if(reading[1] === null){
+        // Null out days with no rain
+        if(!reading[1]){
             reading[1] = null;
         }
         
-        var val_in_inches = mm_to_in(reading[1])
-        data.datasets[1].data.push(val_in_inches);
+        if(reading[1] === null){
+            data.datasets[1].data.push(null);
+        }else{
+            data.datasets[1].data.push(mm_to_in(reading[1]));
+        }
         
         for(var i = 0 ; i < 23 ; i++){
             data.datasets[1].data.push(null);
