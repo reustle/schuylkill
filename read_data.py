@@ -12,8 +12,9 @@ db = sqlite3.connect(DB_FILE)
 
 
 # Read values
-gauge_rows = db.execute('select timestamp, reading from GaugeData where timestamp >= "2017-10-10T00:00:00" order by timestamp asc')
-precip_rows = db.execute('select timestamp, reading from PrecipData where timestamp >= "2017-10-10T00:00:00" order by timestamp asc')
+start_date = '2017-10-01'
+gauge_rows = db.execute('select timestamp, reading from GaugeData where timestamp >= "{start_date}T00:00:00" order by timestamp asc'.format(start_date=start_date))
+precip_rows = db.execute('select timestamp, reading from PrecipData where timestamp >= "{start_date}T00:00:00" order by timestamp asc'.format(start_date=start_date))
 
 gauge_json = json.dumps(list(gauge_rows))
 precip_json = json.dumps(list(precip_rows))

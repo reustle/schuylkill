@@ -70,7 +70,7 @@ var waterChart = new Chart(ctx, {
         responsive: false,
         tooltips: {
             mode: 'index',
-            intersect: false,
+            intersect: false
         },
         legend: {
             display: false
@@ -82,16 +82,12 @@ var waterChart = new Chart(ctx, {
                     format: timeFormat,
                     // round: 'day'
                     tooltipFormat: 'll HH:mm'
-                },
-                scaleLabel: {
-                    display: true,
-                    labelString: 'Date'
                 }
-            }, ],
+            }],
             yAxes: [{
                 id: 'gauge',
                 type: 'linear',
-                position: 'left',
+                position: 'right',
                 ticks: {
                     callback: function(value, index, values) {
                         value = parseInt(value*10)/10;
@@ -101,7 +97,7 @@ var waterChart = new Chart(ctx, {
             },{
                 id: 'precip',
                 type: 'linear',
-                position: 'right',
+                position: 'left',
                 ticks: {
                     callback: function(value, index, values) {
                         value = parseInt(value*10)/10;
