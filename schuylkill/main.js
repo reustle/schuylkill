@@ -1,8 +1,13 @@
 'use strict';
 
+var mm_to_in = function(mm_int){
+    var conv = 0.03937007874;
+    return parseFloat(parseInt((mm_int * conv)*100))/100;
+}
+
 var ctx = document.getElementById('waterChart').getContext('2d');
 
-var generateChartData = function(limit){
+var generateChartData = function(){
     var data = {
         labels: [], // FILL
         datasets: [{
@@ -12,24 +17,19 @@ var generateChartData = function(limit){
             backgroundColor: 'rgb(54, 162, 235)',
             pointRadius: 0,
             fill: false,
-            data: [] // FILL
+            data: []
         },{
             label: 'precip',
             yAxisID: 'precip',
             borderColor: '#e82b53',
             backgroundColor: '#e82b53',
-            pointRadius: 0,
+            pointRadius: 5,
             fill: false,
-            data: [] // FILL
+            data: []
         }]
     }
     
     // River Gauge
-    var gaugeSource = waterData;
-    if(limit){
-        gaugeSource = gaugeSource.slice(limit*-1);
-    }
-    
     gaugeSource.forEach(function(reading){
         var timestamp = moment(reading[0]);
         data.labels.push(timestamp);
@@ -37,11 +37,6 @@ var generateChartData = function(limit){
     })
     
     // Precipitation
-    var precipSource = precipData;
-    if(limit){
-        precipSource = precipSource.slice(limit*-1);
-    }
-    
     precipSource.forEach(function(reading){
         var timestamp = moment(reading[0]);
         
@@ -49,10 +44,11 @@ var generateChartData = function(limit){
             reading[1] = null;
         }
         
-        data.datasets[1].data.push(reading[1]);
+        var val_in_inches = mm_to_in(reading[1])
+        data.datasets[1].data.push(val_in_inches);
         
         for(var i = 0 ; i < 23 ; i++){
-            data.datasets[1].data.push(0);
+            data.datasets[1].data.push(null);
         }
     })
     
@@ -65,7 +61,7 @@ var timeFormat = 'MM/DD/YYYY HH:mm';
 
 var waterChart = new Chart(ctx, {
     type: 'line',
-    data: generateChartData(31*24),
+    data: generateChartData(),
     options: {
         responsive: false,
         tooltips: {
@@ -94,6 +90,7 @@ var waterChart = new Chart(ctx, {
                 position: 'left',
                 ticks: {
                     callback: function(value, index, values) {
+                        value = parseInt(value*10)/10;
                         return value + ' ft';
                     }
                 }
@@ -103,7 +100,8 @@ var waterChart = new Chart(ctx, {
                 position: 'right',
                 ticks: {
                     callback: function(value, index, values) {
-                        return value + ' mm';
+                        value = parseInt(value*10)/10;
+                        return value + ' in';
                     }
                 }
             }]

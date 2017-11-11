@@ -20,8 +20,8 @@ def crawl_data():
     """ Crawl Gauge API Data """
     
     # TODO pull last crawled date, use that -5 or something
-    begin_date = '2017-09-04'
-    end_date = '2019-01-01'
+    begin_date = '2017-11-01'
+    end_date = '2020-01-01'
     #site_number = '01471510%2C01472000'
     site_number = '01472000'
 
@@ -52,7 +52,6 @@ def crawl_data():
         
         entry = line.split('\\t')
         
-        print(entry)
         timestamp = entry[2]
         timestamp = timestamp.replace(' ', 'T')
         timestamp += ':00'

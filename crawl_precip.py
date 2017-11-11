@@ -63,7 +63,7 @@ def insert_reading_db(timestamp, reading):
 
 
 # Iterate through each day of MONTH
-MONTH = '09' # zero pad
+MONTH = '07' # zero pad
 DAYS_IN_MONTH = 30 if MONTH in [4, 6, 9, 11] else 31
 data_rows = []
 for i in range(1, (DAYS_IN_MONTH+1) ):
