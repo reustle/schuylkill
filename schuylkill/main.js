@@ -41,7 +41,7 @@ var generateChartData = function(){
         var timestamp = moment(reading[0]);
         
         // Null out days with no rain
-        if(!reading[1]){
+        if(!reading[1] || reading[1] < 0.5){
             reading[1] = null;
         }
         
