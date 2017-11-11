@@ -16,7 +16,7 @@ url = BASE_URL + ENDPOINT_URL.format(**{
 })
 
 # Load existing data
-handle = open('water_data.js')
+handle = open('schuylkill/water_data.js')
 existing_list = handle.read()
 handle.close()
 existing_list = existing_list[0:-2]
