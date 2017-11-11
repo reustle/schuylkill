@@ -30,8 +30,13 @@ def pull_rainfall(crawl_date):
     precipm = raw_json['history']['dailysummary'][0]['precipm']
     if precipm == 'T':
         precipm = 0
+    else:
+        precipm = float(precipm)
     
-    return float(precipm)
+    if precipm:
+        return precipm
+    else:
+        return 'null'
 
 for i in range(1, 32):
     if i < 10:

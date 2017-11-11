@@ -46,7 +46,7 @@ var generateChartData = function(limit){
         var timestamp = moment(reading[0]);
         
         if(reading[1] === null){
-            reading[1] = 0;
+            reading[1] = null;
         }
         
         data.datasets[1].data.push(reading[1]);
@@ -65,7 +65,7 @@ var timeFormat = 'MM/DD/YYYY HH:mm';
 
 var waterChart = new Chart(ctx, {
     type: 'line',
-    data: generateChartData(31*24 + 192),
+    data: generateChartData(31*24),
     options: {
         responsive: false,
         tooltips: {
