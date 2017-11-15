@@ -3,10 +3,12 @@
 import requests
 import sqlite3
 from pprint import pprint
+from datetime import datetime, timedelta
+from dateutil import parser
 
 DB_FILE = 'data.db'
 BASE_URL = 'https://nwis.waterdata.usgs.gov/usa/nwis/uv/'
-ENDPOINT_URL = '?format=rdb&period=&begin_date={begin_date}&end_date={end_date}&cb_00065=on&site_no={site_number}'
+ENDPOINT_URL = '?format=rdb&period=&begin_date={start_date}&end_date={end_date}&cb_00065=on&site_no={site_number}'
 
 
 # Connect to database
@@ -20,13 +22,13 @@ def crawl_data():
     """ Crawl Gauge API Data """
     
     # TODO pull last crawled date, use that -5 or something
-    begin_date = '2017-11-01'
+    start_date = get_last_crawled_date() - timedelta(days=5)
     end_date = '2020-01-01'
     #site_number = '01471510%2C01472000'
     site_number = '01472000'
 
     url = BASE_URL + ENDPOINT_URL.format(**{
-        'begin_date': begin_date,
+        'start_date': start_date,
         'end_date': end_date,
         'site_number': site_number,
     })
@@ -78,6 +80,15 @@ def update_db(data_rows):
         db.execute(insert_query)
     
     db.commit()
+
+
+def get_last_crawled_date():
+    """ Check the DB to see when the last crawled date was """
+    
+    latest_row = db.execute('select timestamp from GaugeData order by timestamp desc limit 1;')
+    
+    return parser.parse(list(latest_row)[0][0].split('T')[0])
+
 
 update_db(crawl_data())
 
