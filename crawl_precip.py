@@ -1,10 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import requests
 import sqlite3
 import datetime
+from datetime import datetime, timedelta
 from pprint import pprint
 from time import sleep
+from dateutil import parser
 
 DB_FILE = 'data.db'
 ACCESS_TOKEN = '02735a29e901b1f3'
@@ -62,22 +64,35 @@ def insert_reading_db(timestamp, reading):
     db.commit()
 
 
-# Iterate through each day of MONTH
-MONTH = '07' # zero pad
-DAYS_IN_MONTH = 30 if MONTH in [4, 6, 9, 11] else 31
-data_rows = []
-for i in range(1, (DAYS_IN_MONTH+1) ):
-
-    # Zero pad the day
-    if i < 10:
-        i = '0' + str(i)
+def get_last_crawled_date():
+    """ Check the DB to see when the last crawled date was """
     
-    timestamp = "2017-" + MONTH + "-" + str(i) + "T00:00:00"
-    reading = pull_precip('2017' + MONTH + str(i))
+    latest_row = db.execute('select timestamp from PrecipData order by timestamp desc limit 1;')
+    
+    return parser.parse(list(latest_row)[0][0].split('T')[0])
+
+
+def crawl_and_save(dt):
+    """ Crawl precip for a date, and save it to the db """
+    
+    timestamp = dt.strftime('%Y-%m-%d') + "T00:00:00"
+    timestamp_no_hyphen = dt.strftime('%Y%m%d')
+    reading = pull_precip(timestamp_no_hyphen)
     
     insert_reading_db(timestamp, reading)
-    
-    # 10 calls per minute limit
     print(timestamp + ' ' + str(reading))
     sleep(6.5)
+
+
+# Recrawl last crawled date
+last_crawl = get_last_crawled_date()
+crawl_and_save(last_crawl)
+
+# Keep crawling until yesterday
+# ototoi = おととい = day before yesterday
+ototoi = datetime.utcnow() - timedelta(days=2)
+
+while last_crawl < ototoi:
+    last_crawl = last_crawl + timedelta(days=1)
+    crawl_and_save(last_crawl)
 
