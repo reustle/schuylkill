@@ -2,9 +2,25 @@
 <head>
     <title>Water Level</title>
     <meta name='viewport' content='width=device-width, initial-scale=1, minimal-ui'>
+    <style>
+        body {
+            font-family: verdana;
+        }
+        h3 {
+            margin-bottom: 5px;
+            font-weight: normal;
+        }
+        #chartContainer {
+            height: 500px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div style='height:500px'>
+    <h3 id='latestReadVal'></h3>
+    <small id='latestReadTime'></small>
+    
+    <div id='chartContainer'>
         <canvas id='waterChart' style='height:500px; width: 100%'></canvas>
     </div>
     

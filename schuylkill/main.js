@@ -110,3 +110,13 @@ var waterChart = new Chart(ctx, {
     }
 });
 
+// Update latest read header
+var recentReadTime = gaugeSource.slice(-1)[0][0];
+var recentReadVal = gaugeSource.slice(-1)[0][1];
+
+recentReadTime = recentReadTime.replace('T', ' ');
+
+document.getElementById('latestReadVal').innerHTML = 'Latest Read: ' + recentReadVal + ' ft';
+document.getElementById('latestReadTime').innerHTML = 'as of ' + recentReadTime;
+
+
