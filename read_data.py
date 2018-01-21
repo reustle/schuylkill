@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 
 DB_FILE = 'data.db'
-HISTORY_LENGTH = 60
+HISTORY_LENGTH = 30
 
 # Connect to database
 db = sqlite3.connect(DB_FILE)
