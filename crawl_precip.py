@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import logging
 import requests
 import sqlite3
 import datetime
@@ -7,6 +8,8 @@ from datetime import datetime, timedelta
 from pprint import pprint
 from time import sleep
 from dateutil import parser
+
+logging.basicConfig(level=logging.INFO)
 
 DB_FILE = 'data.db'
 ACCESS_TOKEN = '02735a29e901b1f3'
@@ -80,7 +83,7 @@ def crawl_and_save(dt):
     reading = pull_precip(timestamp_no_hyphen)
     
     insert_reading_db(timestamp, reading)
-    print(timestamp + ' ' + str(reading))
+    logging.info(timestamp + ' ' + str(reading))
     sleep(6.5)
 
 

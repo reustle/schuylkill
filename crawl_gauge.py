@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
+import logging
 import requests
 import sqlite3
 from pprint import pprint
 from datetime import datetime, timedelta
 from dateutil import parser
+
+#logging.basicConfig(level=logging.DEBUG)
 
 DB_FILE = 'data.db'
 BASE_URL = 'https://nwis.waterdata.usgs.gov/usa/nwis/uv/'
@@ -23,6 +26,7 @@ def crawl_data():
     
     # TODO pull last crawled date, use that -5 or something
     start_date = get_last_crawled_date() - timedelta(days=5)
+    start_date = start_date.strftime('%Y-%m-%d')
     end_date = '2020-01-01'
     #site_number = '01471510%2C01472000'
     site_number = '01472000'
@@ -32,6 +36,8 @@ def crawl_data():
         'end_date': end_date,
         'site_number': site_number,
     })
+    
+    logging.debug('URL: ' + url)
 
     # Load Data
     data_rows = []
@@ -53,6 +59,12 @@ def crawl_data():
             continue
         
         entry = line.split('\\t')
+        
+        reading = entry[4]
+        
+        # If reading is 'Eqp' which I think is equip failure (did that during ice-out)
+        if reading == 'Eqp':
+            continue
         
         timestamp = entry[2]
         timestamp = timestamp.replace(' ', 'T')
@@ -76,6 +88,8 @@ def update_db(data_rows):
                 {reading}
             )
         '''.format(timestamp=entry[0], reading=entry[1])
+        
+        logging.debug(insert_query)
         
         db.execute(insert_query)
     
